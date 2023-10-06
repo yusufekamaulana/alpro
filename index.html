@@ -2,13 +2,26 @@
 <html>
 <body>
 
-<div id="demo">
-<h2>The XMLHttpRequest Object</h2>
-<button type="button" onclick="loadDoc()">Change Content</button>
+<button type="button" onclick="fetch()">Get the File</button>
+<div id="demo"></div>
+
+<div id="header">
+  <h1>Fetch Data from URL</h1>
 </div>
 
+<div id="content">
+  <input type="text" id="url" placeholder="Masukkan URL">
+  <button id="fetchButton" onclick="fetchData()">Fetch Data</button>
+</div>
+
+<div id="data">
+    <table id="data-table"></table>
+</div>
+
+
+
 <script>
-function loadDoc() {
+function fetch() {
   const xhttp = new XMLHttpRequest();
   xhttp.onload = function() {
     document.getElementById("demo").innerHTML =
