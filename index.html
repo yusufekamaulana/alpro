@@ -1,36 +1,86 @@
 <!DOCTYPE html>
 <html>
+<head>
+  <style>
+
+    #content {
+      align-items: center;
+      text-align: center;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      border: 1px solid #000;
+    }
+
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border: 1px solid #000;
+    }
+
+    input[type="text"] {
+      width: 300px;
+      padding: 5px;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 3px 10px;
+      background-color: #007bff;
+      color: #fff;
+    }
+
+    #data {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
 <body>
-
-<button type="button" onclick="fetch()">Get the File</button>
-<div id="demo"></div>
-
-<div id="header">
-  <h1>Fetch Data from URL</h1>
-</div>
-
+  
 <div id="content">
+  <h1>Fetch Data from URL</h1>
   <input type="text" id="url" placeholder="Masukkan URL">
-  <button id="fetchButton" onclick="fetchData()">Fetch Data</button>
+  <button type="button" onclick="fetchData()">Get the File</button>
+  <div id="data"></div>
 </div>
-
-<div id="data">
-    <table id="data-table"></table>
-</div>
-
-
 
 <script>
-function fetch() {
-  const xhttp = new XMLHttpRequest();
-  xhttp.onload = function() {
-    document.getElementById("demo").innerHTML =
-    this.responseText;
+  function createTable(data) {
+    const table = document.createElement("table");
+    const headerRow = table.insertRow(0);
+    // Membuat header tabel berdasarkan properti pertama dalam data JSON
+    for (var key in data[0]) {
+      if (data[0].hasOwnProperty(key)) {
+        var th = document.createElement("th");
+        th.innerHTML = key;
+        headerRow.appendChild(th);
+      }
+    }
+    // Membuat baris-baris data
+    for (var i = 0; i < data.length; i++) {
+      var row = table.insertRow(i + 1);
+      for (var key in data[i]) {
+        var cell = row.insertCell(-1);
+        cell.innerHTML = data[i][key];
+      }
+    }
+    document.getElementById("data").innerHTML = '';
+    document.getElementById("data").appendChild(table);
   }
-  xhttp.open("GET", "coffee.php");
-  xhttp.send();
-}
+  
+  function fetchData() {
+    const url = document.getElementById("url").value;
+    const xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+      // Panggil createTable dengan data JSON yang diterima.
+      createTable(JSON.parse(this.responseText));
+    }
+    xhttp.open("GET", url, true);
+    xhttp.send();
+  }
 </script>
-
 </body>
 </html>
