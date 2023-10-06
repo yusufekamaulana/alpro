@@ -1,92 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fetch Data from URL</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        #container {
-            text-align: center;
-        }
-        #table-container {
-            display: none;
-            margin-top: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid #ccc;
-            padding: 10px;
-        }
-    </style>
-</head>
-
+<html>
 <body>
-    <div id="container">
-        <h1>Fetch Data from URL</h1>
-        <input type="text" id="url" placeholder="Masukkan URL">
-        <button id="fetchButton" onclick="fetchData()">Fetch Data</button>
-        <div id="table-container">
-            <table id="data-table"></table>
-        </div>
-    </div>
 
-    <script>
-        const urlInput = document.getElementById("url");
-        const contentTable = document.getElementById("data-table");
+<div id="demo">
+<h2>The XMLHttpRequest Object</h2>
+<button type="button" onclick="loadDoc()">Change Content</button>
+</div>
 
-        const fetchData = async () => {
-            const url = urlInput.value; // Ambil URL dari input
-            try {
-                const response = await fetch(url); // Menggunakan URL yang dimasukkan pengguna
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const data = await response.json();
+<script>
+function loadDoc() {
+  const xhttp = new XMLHttpRequest();
+  xhttp.onload = function() {
+    document.getElementById("demo").innerHTML =
+    this.responseText;
+  }
+  xhttp.open("GET", "coffee.php");
+  xhttp.send();
+}
+</script>
 
-                // Mendapatkan kolom-kolom (header) dari data pertama
-                const columns = Object.keys(data[0]);
-
-                // Membuat header tabel
-                const tableHeader = document.createElement("thead");
-                const headerRow = document.createElement("tr");
-                columns.forEach(columnName => {
-                    const th = document.createElement("th");
-                    th.textContent = columnName;
-                    headerRow.appendChild(th);
-                });
-                tableHeader.appendChild(headerRow);
-
-                // Membuat body tabel dengan data
-                const tableBody = document.createElement("tbody");
-                data.forEach(item => {
-                    const row = document.createElement("tr");
-                    columns.forEach(columnName => {
-                        const cell = document.createElement("td");
-                        cell.textContent = item[columnName];
-                        row.appendChild(cell);
-                    });
-                    tableBody.appendChild(row);
-                });
-
-                // Menghapus konten sebelumnya dan menambahkan tabel yang baru dibuat
-                contentTable.innerHTML = "";
-                contentTable.appendChild(tableHeader);
-                contentTable.appendChild(tableBody);
-
-                // Tampilkan tabel setelah selesai mengambil data
-                document.getElementById("table-container").style.display = "block";
-            } catch (error) {
-                console.error("Error fetching data:", error);
-                contentTable.textContent = "Error fetching data.";
-            }
-        };
-
-    </script>
 </body>
 </html>
